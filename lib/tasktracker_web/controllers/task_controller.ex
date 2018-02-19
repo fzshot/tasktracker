@@ -23,7 +23,7 @@ defmodule TasktrackerWeb.TaskController do
   def new(conn, _params) do
     changeset = Posts.change_task(%Task{})
     users = Accounts.list_users
-    render(conn, "new.html", changeset: changeset, all_users: users)
+    render(conn, "new.html", changeset: changeset, all_users: users, task: nil)
   end
 
   def create(conn, %{"task" => task_params}) do
@@ -36,7 +36,7 @@ defmodule TasktrackerWeb.TaskController do
         |> put_flash(:info, "Task " <> task.title <> " created successfully.")
         |> redirect(to: page_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset, all_users: users)
+        render(conn, "new.html", changeset: changeset, all_users: users, task: nil)
     end
   end
 

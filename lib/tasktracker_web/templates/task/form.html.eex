@@ -5,25 +5,50 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= label f, :user_id, class: "control-label" do %>
-        Assign To
-    <% end %>
-    <%= select f, :user_id, Enum.map(@all_users, fn u -> {u.name, u.id} end), class: "form-control" %>
-    <%= error_tag f, :user_id %>
-  </div>
+  <%= if @task do %>
+      <%= if @current_user.admin or @current_user.id == @task.creator_id do %>
+        <div class="form-group">
+            <%= label f, :user_id, class: "control-label" do %>
+                Assign To
+            <% end %>
+            <%= select f, :user_id, Enum.map(@all_users, fn u -> {u.name, u.id} end), class: "form-control" %>
+            <%= error_tag f, :user_id %>
+        </div>
 
-  <div class="form-group">
-    <%= label f, :title, class: "control-label" %>
-    <%= text_input f, :title, class: "form-control" %>
-    <%= error_tag f, :title %>
-  </div>
+        <div class="form-group">
+            <%= label f, :title, class: "control-label" %>
+            <%= text_input f, :title, class: "form-control" %>
+            <%= error_tag f, :title %>
+        </div>
 
-  <div class="form-group">
-    <%= label f, :body, class: "control-label" %>
-    <%= textarea f, :body, class: "form-control" %>
-    <%= error_tag f, :body %>
-  </div>
+        <div class="form-group">
+            <%= label f, :body, class: "control-label" %>
+            <%= textarea f, :body, class: "form-control" %>
+            <%= error_tag f, :body %>
+        </div>
+      <% end %>
+  <% else %>
+    <div class="form-group">
+        <%= label f, :user_id, class: "control-label" do %>
+            Assign To
+        <% end %>
+        <%= select f, :user_id, Enum.map(@all_users, fn u -> {u.name, u.id} end), class: "form-control" %>
+        <%= error_tag f, :user_id %>
+    </div>
+
+    <div class="form-group">
+        <%= label f, :title, class: "control-label" %>
+        <%= text_input f, :title, class: "form-control" %>
+        <%= error_tag f, :title %>
+    </div>
+
+    <div class="form-group">
+        <%= label f, :body, class: "control-label" %>
+        <%= textarea f, :body, class: "form-control" %>
+        <%= error_tag f, :body %>
+    </div>
+  <% end %>
+
 
 
   <div class="form-group">
