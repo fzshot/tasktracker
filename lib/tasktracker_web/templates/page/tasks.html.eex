@@ -1,0 +1,47 @@
+<div class="row justify-content-between">
+    <div class="col-auto">
+        <h2>Listing Tasks</h2>
+    </div>
+    <div class="col-auto">
+        <%= if @current_user.admin do %>
+            <span><%= link "All Tasks", to: task_path(@conn, :index), class: "btn btn-primary" %></span>
+        <% end %>
+        <span><%= link "New Task", to: task_path(@conn, :new), class: "btn btn-primary" %></span>
+    </div>
+</div>
+<%= Enum.map @tasks, fn task -> %>
+      <%= if task.creator.id == @user_id or task.user.id == @user_id do %>
+          <div class="row">
+              <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= task.title %>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            Creator: <%= task.creator.name %>
+                            Assigned to: <%= task.user.name %>
+                            Time spent: <%= task.hours %>:<%= task.mins %>
+                            Complete:
+                                <%= if task.complete do %>
+                                    Yes
+                                <% else %>
+                                    No
+                                <% end %>
+                        </h6>
+                        <p class="card-text">
+                            <%= task.body %>
+                        </p>
+                        <div style="text-align: right">
+                            <span><%= link "Edit", to: task_path(@conn, :edit, task), class: "btn btn-default btn-xs" %></span>
+                            <%= if task.creator.id == @user_id do %>
+                                <span><%= link "Delete", to: task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+    <% end %>
+<% end %>
+

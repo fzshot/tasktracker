@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Hello Tasktracker!</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
+
+  <body>
+    <div class="container">
+
+        <%= if get_flash(@conn, :info) do %>
+            <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+        <% end %>
+        <%= if get_flash(@conn, :error) do %>
+            <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+        <% end %>
+
+        <div class="row">
+            <div class="col-4 offset-9">
+                <%= if @current_user do %>
+                    <p>
+                        Logged in as: <%= @current_user.name %> <%= if @current_user.admin do %>(admin)<% end %> |
+                        <%= link "Log Out", to: "/session", method: :delete %>
+                    </p>
+                <% else %>
+                    <p>Not logged in
+                <% end %>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-auto align-self-center">
+                <h1>Task Tracker</h1>
+            </div>
+        </div>
+
+      <main role="main">
+        <%= render @view_module, @view_template, assigns %>
+      </main>
+
+    </div> <!-- /container -->
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>
