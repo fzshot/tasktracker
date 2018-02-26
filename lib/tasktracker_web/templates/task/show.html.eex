@@ -34,7 +34,11 @@
 
   <li>
     <strong>Complete:</strong>
-    <%= @task.complete %>
+    <%= if @task.complete do %>
+        Yes
+    <% else %>
+        No
+    <% end %>
   </li>
 
 </ul>

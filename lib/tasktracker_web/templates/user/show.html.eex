@@ -12,6 +12,30 @@
     <%= @user.email %>
   </li>
 
+  <li>
+      <strong>Manager:</strong>
+      <ul>
+        <%= for u <- List.wrap(@managers) do %>
+            <li>
+                <%= u.manager.name %>
+                <%= u.manager.email %>
+            </li>
+        <% end %>
+      </ul>
+  </li>
+
+  <li>
+      <strong>Underlings:</strong>
+      <ul>
+        <%= for u <- List.wrap(@employees) do %>
+            <li>
+                <%= u.employee.name %>
+                <%= u.employee.email %>
+            </li>
+        <% end %>
+      </ul>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>

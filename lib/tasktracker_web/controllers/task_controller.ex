@@ -7,17 +7,16 @@ defmodule TasktrackerWeb.TaskController do
   alias TasktrackerWeb.ErrorView
 
   def index(conn, _params) do
-    tasks = Posts.list_tasks()
     current_user = conn.assigns[:current_user]
     if current_user do
-      if current_user.manager do
-        render(conn, "index.html", tasks: tasks)
-      end
+      tasks = Posts.list_creator_tasks(current_user.id)
+      render(conn, "index.html", tasks: tasks)
+    else
+      conn
+      |> put_status(401)
+      |> put_view(ErrorView)
+      |> render(:"401")
     end
-    conn
-    |> put_status(401)
-    |> put_view(ErrorView)
-    |> render(:"401")
   end
 
   def new(conn, _params) do
@@ -46,8 +45,7 @@ defmodule TasktrackerWeb.TaskController do
     task = Posts.get_task!(id)
     current_user = conn.assigns[:current_user]
     if current_user do
-      if current_user.manager or
-      task.creator_id == current_user.id or
+      if task.creator_id == current_user.id or
       task.user_id == current_user.id do
         render(conn, "show.html", task: task)
       end

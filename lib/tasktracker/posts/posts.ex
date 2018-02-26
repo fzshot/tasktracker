@@ -17,10 +17,25 @@ defmodule Tasktracker.Posts do
       [%Task{}, ...]
 
   """
-  def list_tasks do
-    Repo.all(Task)
-    |> Repo.preload(:user)
+  # def list_tasks do
+  #   Repo.all(Task)
+  #   |> Repo.preload(:user)
+  #   |> Repo.preload(:creator)
+  #   |> List.wrap
+  # end
+  def list_creator_tasks(user_id) do
+    Repo.all(from f in Task,
+      where: f.creator_id == ^user_id)
     |> Repo.preload(:creator)
+    |> Repo.preload(:user)
+    |> List.wrap
+  end
+
+  def list_user_tasks(user_id) do
+    Repo.all(from f in Task,
+      where: f.user_id == ^user_id)
+    |> Repo.preload(:creator)
+    |> Repo.preload(:user)
     |> List.wrap
   end
 

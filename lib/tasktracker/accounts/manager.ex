@@ -1,7 +1,9 @@
 defmodule Tasktracker.Accounts.Manager do
   use Ecto.Schema
   import Ecto.Changeset
+
   alias Tasktracker.Accounts.Manager
+  alias Tasktracker.Accounts.User
 
 
   schema "managers" do

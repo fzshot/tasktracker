@@ -6,12 +6,12 @@
   <% end %>
 
   <%= if @task do %>
-      <%= if @current_user.manager or @current_user.id == @task.creator_id do %>
+      <%= if @current_user.id == @task.creator_id do %>
         <div class="form-group">
             <%= label f, :user_id, class: "control-label" do %>
                 Assign To
             <% end %>
-            <%= select f, :user_id, Enum.map(@all_users, fn u -> {u.name, u.id} end), class: "form-control" %>
+            <%= select f, :user_id, Enum.map(@all_users, fn u -> {u.employee.name, u.employee.id} end), class: "form-control" %>
             <%= error_tag f, :user_id %>
         </div>
 
@@ -32,7 +32,7 @@
         <%= label f, :user_id, class: "control-label" do %>
             Assign To
         <% end %>
-        <%= select f, :user_id, Enum.map(@all_users, fn u -> {u.name, u.id} end), class: "form-control" %>
+        <%= select f, :user_id, Enum.map(@all_users, fn u -> {u.employee.name, u.employee.id} end), class: "form-control" %>
         <%= error_tag f, :user_id %>
     </div>
 

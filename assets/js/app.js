@@ -11,7 +11,7 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import "phoenix_html";
 
 // Import local files
 //
@@ -33,9 +33,9 @@ function update_button() {
 }
 
 function set_button(employee_id, value) {
-    $(".folow-button").each((_,bb) => {
-        if ($(bb).data("employee_id") == employee_id) {
-            $(bb).data("manage_id", value);
+    $(".manage-button").each((_,bb) => {
+        if ($(bb).data("employee-id") == employee_id) {
+            $(bb).data("manage-id", value);
         }
     });
     update_button();
@@ -54,17 +54,17 @@ function manage(employee_id, current_id) {
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
         data: text,
-        sucess: (resp) => {set_button(employee_id, resp.data.id);}
+        success: (resp) => {set_button(employee_id, resp.data.id);}
     });
 }
 
-function unmanage(manage_id) {
+function unmanage(employee_id, manage_id) {
     $.ajax(manager_path + "/" + manage_id, {
         method: "delete",
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
         data: "",
-        success: () => {set_button(manage_id, "");}
+        success: () => {set_button(employee_id, "");}
     });
 }
 
@@ -78,16 +78,13 @@ function manage_click(ev) {
         manage(employee_id, current_id);
     }
     else {
-        unmanage(manage_id);
+        unmanage(employee_id, manage_id);
     }
 
 }
 
 function init_button() {
     $(".manage-button").click(manage_click);
-    // $(".manage-button").click(() => {
-    //     alert("Test");
-    // });
     update_button();
 }
 

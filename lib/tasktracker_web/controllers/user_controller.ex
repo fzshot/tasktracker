@@ -8,16 +8,15 @@ defmodule TasktrackerWeb.UserController do
   def index(conn, _params) do
     users = Accounts.list_users()
     current_user = conn.assigns[:current_user]
-    manage = Accounts.manage_map(current_user.id)
     if current_user do
-      if current_user.manager do
-        render(conn, "index.html", users: users, manage: manage)
-      end
+      manage = Accounts.list_mgmt_user(current_user.id)
+      render(conn, "index.html", users: users, manage: manage)
+    else
+      conn
+      |> put_status(401)
+      |> put_view(ErrorView)
+      |> render(:"401")
     end
-    conn
-    |> put_status(401)
-    |> put_view(ErrorView)
-    |> render(:"401")
   end
 
   def new(conn, _params) do
@@ -39,15 +38,16 @@ defmodule TasktrackerWeb.UserController do
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     current_user = conn.assigns[:current_user]
+    employees = Accounts.manage_map(id)
+    managers = Accounts.employee_map(id)
     if current_user do
-      if current_user.manager or current_user.id == user.id do
-        render(conn, "show.html", user: user)
-      end
+      render(conn, "show.html", user: user, employees: employees, managers: managers)
+    else
+      conn
+      |> put_status(401)
+      |> put_view(ErrorView)
+      |> render(:"401")
     end
-    conn
-    |> put_status(401)
-    |> put_view(ErrorView)
-    |> render(:"401")
   end
 
   def edit(conn, %{"id" => id}) do
@@ -55,14 +55,8 @@ defmodule TasktrackerWeb.UserController do
     changeset = Accounts.change_user(user)
     current_user = conn.assigns[:current_user]
     if current_user do
-      if current_user.id == user.id or current_user.manager do
-        render(conn, "edit.html", user: user, changeset: changeset)
-      end
+      render(conn, "edit.html", user: user, changeset: changeset)
     end
-    conn
-    |> put_status(401)
-    |> put_view(ErrorView)
-    |> render(:"401")
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do

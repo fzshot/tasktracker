@@ -206,12 +206,24 @@ defmodule Tasktracker.Accounts do
     Manager.changeset(manager, %{})
   end
 
-  def manage_map(user_id) do
+  def list_mgmt_user(user_id) do
     Repo.all(from f in Manager,
       where: f.manager_id == ^user_id)
     |> Enum.map(fn x ->
       {x.employee_id, x.id}
     end)
     |> Enum.into(%{})
+  end
+
+  def employee_map(user_id) do
+    Repo.all(from f in Manager,
+      where: f.employee_id == ^user_id)
+    |> Repo.preload(:manager)
+  end
+
+  def manage_map(user_id) do
+    Repo.all(from f in Manager,
+      where: f.manager_id == ^user_id)
+    |> Repo.preload(:employee)
   end
 end

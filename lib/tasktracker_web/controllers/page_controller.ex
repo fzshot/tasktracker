@@ -6,7 +6,7 @@ defmodule TasktrackerWeb.PageController do
   def index(conn, _params) do
     user_id = get_session(conn, :user_id)
     if user_id do
-      tasks = Posts.list_tasks
+      tasks = Posts.list_user_tasks(user_id)
       render conn, "index.html", tasks: tasks, user_id: user_id
     else
       render conn, "index.html", tasks: []
