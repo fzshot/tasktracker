@@ -20,20 +20,10 @@ import "phoenix_html"
 
 // import socket from "./socket"
 
-function set_button() {
-}
-
-function manage() {
-}
-
-function unmanage() {
-}
-
 function update_button() {
     $(".manage-button").each((_, bb) => {
-        let employee_id = $(bb).data("employee-id");
-        let manager_id = $(bb).data("manager-id");
-        if (manager_id == "") {
+        let manage_id = $(bb).data("manage-id");
+        if (manage_id == "") {
             $(bb).text("Manage");
         }
         else {
@@ -42,18 +32,63 @@ function update_button() {
     });
 }
 
+function set_button(employee_id, value) {
+    $(".folow-button").each((_,bb) => {
+        if ($(bb).data("employee_id") == employee_id) {
+            $(bb).data("manage_id", value);
+        }
+    });
+    update_button();
+}
+
+function manage(employee_id, current_id) {
+    let text = JSON.stringify({
+        manager: {
+            manager_id: current_id,
+            employee_id: employee_id
+        }
+    });
+
+    $.ajax(manager_path, {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: text,
+        sucess: (resp) => {set_button(employee_id, resp.data.id);}
+    });
+}
+
+function unmanage(manage_id) {
+    $.ajax(manager_path + "/" + manage_id, {
+        method: "delete",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: "",
+        success: () => {set_button(manage_id, "");}
+    });
+}
+
+
 function manage_click(ev) {
     let btn = $(ev.target);
     let employee_id = btn.data("employee-id");
-    let manager_id = btn.data("manager-id");
-    if (manager_id == "") {
-        manage(employee)
+    let manage_id = btn.data("manage-id");
+    let current_id = btn.data("current-id");
+    if (manage_id == "") {
+        manage(employee_id, current_id);
+    }
+    else {
+        unmanage(manage_id);
     }
 
 }
 
 function init_button() {
-    $(".follow-button").click(manage_click);
+    $(".manage-button").click(manage_click);
+    // $(".manage-button").click(() => {
+    //     alert("Test");
+    // });
+    update_button();
 }
 
 $(init_button);

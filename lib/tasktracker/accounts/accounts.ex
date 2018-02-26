@@ -210,7 +210,7 @@ defmodule Tasktracker.Accounts do
     Repo.all(from f in Manager,
       where: f.manager_id == ^user_id)
     |> Enum.map(fn x ->
-      {x.employee_id, x.manager_id}
+      {x.employee_id, x.id}
     end)
     |> Enum.into(%{})
   end
