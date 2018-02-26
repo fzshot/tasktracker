@@ -10,7 +10,7 @@ defmodule TasktrackerWeb.TaskController do
     tasks = Posts.list_tasks()
     current_user = conn.assigns[:current_user]
     if current_user do
-      if current_user.admin do
+      if current_user.manager do
         render(conn, "index.html", tasks: tasks)
       end
     end
@@ -22,13 +22,15 @@ defmodule TasktrackerWeb.TaskController do
 
   def new(conn, _params) do
     changeset = Posts.change_task(%Task{})
-    users = Accounts.list_users
-    render(conn, "new.html", changeset: changeset, all_users: users, task: nil)
+    current_user = conn.assigns[:current_user]
+    mgmt_users = Accounts.manage_map(current_user.id)
+    render(conn, "new.html", changeset: changeset, all_users: mgmt_users, task: nil)
   end
 
   def create(conn, %{"task" => task_params}) do
     user_id = get_session(conn, :user_id)
-    users = Accounts.list_users
+    current_user = conn.assigns[:current_user]
+    mgmt_users = Accounts.manage_map(current_user.id)
     task_params = Map.put(task_params, "creator_id", user_id)
     case Posts.create_task(task_params) do
       {:ok, task} ->
@@ -36,7 +38,7 @@ defmodule TasktrackerWeb.TaskController do
         |> put_flash(:info, "Task " <> task.title <> " created successfully.")
         |> redirect(to: page_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset, all_users: users, task: nil)
+        render(conn, "new.html", changeset: changeset, all_users: mgmt_users, task: nil)
     end
   end
 
@@ -44,7 +46,7 @@ defmodule TasktrackerWeb.TaskController do
     task = Posts.get_task!(id)
     current_user = conn.assigns[:current_user]
     if current_user do
-      if current_user.admin or
+      if current_user.manager or
       task.creator_id == current_user.id or
       task.user_id == current_user.id do
         render(conn, "show.html", task: task)
@@ -59,13 +61,15 @@ defmodule TasktrackerWeb.TaskController do
   def edit(conn, %{"id" => id}) do
     task = Posts.get_task!(id)
     changeset = Posts.change_task(task)
-    users = Accounts.list_users
-    render(conn, "edit.html", task: task, changeset: changeset, all_users: users)
+    current_user = conn.assigns[:current_user]
+    mgmt_users = Accounts.manage_map(current_user.id)
+    render(conn, "edit.html", task: task, changeset: changeset, all_users: mgmt_users)
   end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
     task = Posts.get_task!(id)
-    users = Accounts.list_users
+    current_user = conn.assigns[:current_user]
+    mgmt_users = Accounts.manage_map(current_user.id)
 
     case Posts.update_task(task, task_params) do
       {:ok, _} ->
@@ -73,7 +77,7 @@ defmodule TasktrackerWeb.TaskController do
         |> put_flash(:info, "Task updated successfully.")
         |> redirect(to: page_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", task: task, changeset: changeset, all_users: users)
+        render(conn, "edit.html", task: task, changeset: changeset, all_users: mgmt_users)
     end
   end
 

@@ -3,7 +3,7 @@
         <h2>Listing Tasks</h2>
     </div>
     <div class="col-auto">
-        <%= if @current_user.admin do %>
+        <%= if @current_user.manager do %>
             <span><%= link "All Tasks", to: task_path(@conn, :index), class: "btn btn-primary" %></span>
         <% end %>
         <span><%= link "New Task", to: task_path(@conn, :new), class: "btn btn-primary" %></span>

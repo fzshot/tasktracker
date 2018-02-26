@@ -8,9 +8,10 @@ defmodule TasktrackerWeb.UserController do
   def index(conn, _params) do
     users = Accounts.list_users()
     current_user = conn.assigns[:current_user]
+    manage = Accounts.manage_map(current_user.id)
     if current_user do
-      if current_user.admin do
-        render(conn, "index.html", users: users)
+      if current_user.manager do
+        render(conn, "index.html", users: users, manage: manage)
       end
     end
     conn
@@ -39,7 +40,7 @@ defmodule TasktrackerWeb.UserController do
     user = Accounts.get_user!(id)
     current_user = conn.assigns[:current_user]
     if current_user do
-      if current_user.admin or current_user.id == user.id do
+      if current_user.manager or current_user.id == user.id do
         render(conn, "show.html", user: user)
       end
     end
@@ -54,7 +55,7 @@ defmodule TasktrackerWeb.UserController do
     changeset = Accounts.change_user(user)
     current_user = conn.assigns[:current_user]
     if current_user do
-      if current_user.id == user.id or current_user.admin do
+      if current_user.id == user.id or current_user.manager do
         render(conn, "edit.html", user: user, changeset: changeset)
       end
     end

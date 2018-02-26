@@ -6,7 +6,7 @@
   <% end %>
 
   <%= if @task do %>
-      <%= if @current_user.admin or @current_user.id == @task.creator_id do %>
+      <%= if @current_user.manager or @current_user.id == @task.creator_id do %>
         <div class="form-group">
             <%= label f, :user_id, class: "control-label" do %>
                 Assign To
