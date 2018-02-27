@@ -161,24 +161,31 @@ function delete_interval(ev) {
 function add_interval(ev) {
     let start_time = $(".start-time-input").val();
     let stop_time = $(".stop-time-input").val();
-    let task_id = $(ev.target).data("task-id");
+    if (stop_time <= start_time) {
+        alert("Stop Time has to be after Start Time")
+    }
+    else {
+        let task_id = $(ev.target).data("task-id");
 
-    let text = JSON.stringify({
-        timeblock: {
-            task_id: task_id,
-            start_time: new Date(start_time),
-            stop_time: new Date(stop_time)
-        }
-    });
+        console.log(start_time);
+        console.log(stop_time);
 
-    $.ajax(timeblock_path, {
-        method: "post",
-        dataType: "json",
-        contentType: "application/json; charset=UTF-8",
-        data: text,
-        success: () => {location.reload();}
-    });
+        let text = JSON.stringify({
+            timeblock: {
+                task_id: task_id,
+                start_time: new Date(start_time),
+                stop_time: new Date(stop_time)
+            }
+        });
 
+        $.ajax(timeblock_path, {
+            method: "post",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: text,
+            success: () => {location.reload();}
+        });
+    }
 }
 
 function manage_click(ev) {

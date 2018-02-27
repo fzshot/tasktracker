@@ -264,7 +264,10 @@ defmodule Tasktracker.Posts do
     end)
     |> Enum.sum
     |> (fn x ->
-      {task_id, [div(x,86400), div(x,3600), div(x, 60)]}
+      day = div(x, 86400)
+      hour = div(x-day*86400,3600)
+      minutes = div(x-day*86400-3600*hour,60)
+      {task_id, [day, hour, minutes]}
     end).()
   end
 

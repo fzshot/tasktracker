@@ -37,12 +37,22 @@
           <%= for t <- @intervals do %>
               <li>
                 <strong>Start Time:</strong>
-                <%= DateTime.truncate(t.start_time, :second) %>
+                    <%=
+                    t.start_time
+                    |> DateTime.to_naive
+                    |> NaiveDateTime.add(-18000)
+                    |> NaiveDateTime.truncate(:second)
+                    %>
                 <strong>Stop Time:</strong>
                 <%= if DateTime.diff(t.stop_time, t.start_time, :second) == 0 do %>
                     Still working
                 <% else %>
-                    <%= DateTime.truncate(t.stop_time, :second) %>
+                    <%=
+                    t.stop_time
+                    |> DateTime.to_naive
+                    |> NaiveDateTime.add(-18000)
+                    |> NaiveDateTime.truncate(:second)
+                    %>
                 <% end %>
               </li>
           <% end %>
