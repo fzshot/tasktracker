@@ -1,3 +1,7 @@
+<script>
+ window.timeblock_path = "<%= timeblock_path(@conn, :index) %>";
+</script>
+
 <div class="row justify-content-between">
     <div class="col-auto">
         <h2>Listing Tasks</h2>
@@ -19,7 +23,9 @@
                 <h6 class="card-subtitle mb-2 text-muted">
                     Creator: <%= task.creator.name %>
                     Assigned to: <%= task.user.name %>
-                    Time spent: <%= task.hours %>:<%= task.mins %>
+                    Time Sepnt: <%= Enum.at(@time_interval[task.id], 0) %> days
+                    <%= Enum.at(@time_interval[task.id], 1) %> hours
+                    <%= Enum.at(@time_interval[task.id], 2) %> minutes
                     Complete:
                         <%= if task.complete do %>
                             Yes
@@ -31,7 +37,12 @@
                     <%= task.body %>
                 </p>
                 <div style="text-align: right">
-                    <button class="timestamp-btn btn btn-primary"></button>
+                    <%= if !task.complete do %>
+                        <button class="timestamp-btn btn btn-primary"
+                                data-time-id="<%= @time_id[task.id] %>"
+                                data-task-id="<%= task.id %>">
+                        </button>
+                    <% end %>
                     <span><%= link "Edit", to: task_path(@conn, :edit, task), class: "btn btn-default btn-xs" %></span>
                 </div>
             </div>

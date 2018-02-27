@@ -37,5 +37,6 @@ defmodule TasktrackerWeb.Router do
     pipe_through :api
 
     resources "/managers", ManagerController, except: [:new, :edit]
+    resources "/timeblocks", TimeblockController, except: [:new, :edit]
   end
 end

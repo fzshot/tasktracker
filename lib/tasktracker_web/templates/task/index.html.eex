@@ -21,7 +21,9 @@
       <td><%= task.title %></td>
       <td><%= task.body %></td>
       <td>
-          <%= task.hours %>:<%= task.mins %>
+          <%= Enum.at(@time_interval[task.id], 0) %> days
+          <%= Enum.at(@time_interval[task.id], 1) %> hours
+          <%= Enum.at(@time_interval[task.id], 2) %> minutes
       </td>
       <td>
           <%= if task.complete do %>

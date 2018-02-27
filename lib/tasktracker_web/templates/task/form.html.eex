@@ -1,3 +1,6 @@
+<script>
+ window.timeblock_path = "<%= timeblock_path(@conn, :index) %>";
+</script>
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -49,33 +52,62 @@
     </div>
   <% end %>
 
-
-
-  <div class="form-group">
-    <%= label f, :hours, class: "control-label" do %>
-        Hours Spent
-    <% end %>
-    <%= number_input f, :hours, class: "form-control" , min: 0 %>
-    <%= error_tag f, :hours %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :mins, class: "control-label" do %>
-        Minutes Spent (minutes, 15min increment)
-    <% end %>
-    <%= number_input f, :mins, class: "form-control" , min: 0, max: 45, step: 15 %>
-    <%= error_tag f, :mins %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :complete, class: "control-label" do %>
-        Complete?
-    <% end %>
-    <%= checkbox f, :complete, class: "checkbox" %>
-    <%= error_tag f, :complete %>
-  </div>
+  <%= if @task do %>
+      <%= if @current_user.id == @task.user_id do %>
+        <div class="form-group">
+            <%= label f, :complete, class: "control-label" do %>
+                Complete?
+            <% end %>
+            <%= checkbox f, :complete, class: "checkbox" %>
+            <%= error_tag f, :complete %>
+        </div>
+      <% end %>
+  <% end %>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
+
 <% end %>
+
+  <%= if @task do %>
+      <%= if @current_user.id == @task.user_id do %>
+        <%= for t <- @intervals do %>
+            <div class="row" style="margin-top: 1rem; margin-bottom: 1rem">
+                <div class="col-auto">
+                    <strong>Start Time:</strong>
+                    <%= DateTime.truncate(t.start_time, :second) %>
+                    <strong>Stop Time:</strong>
+                    <%= if DateTime.diff(t.stop_time, t.start_time, :second) == 0 do %>
+                        Still working
+                    <% else %>
+                        <%= DateTime.truncate(t.stop_time, :second) %>
+                    <% end %>
+                    <button class="delete-interval btn btn-danger"
+                            data-time-id="<%= t.id %>">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        <% end %>
+        <div class="row" style="margin-top: 1rem; margin-bottom: 1rem">
+            <div class="col-auto">
+                <label for="start-time">Start Time</label>
+                <input type="datetime-local" class="start-time-input">
+                <label for="stop-time">Stop Time</label>
+                <input type="datetime-local" class="stop-time-input">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1rem; margin-bottom: 1rem">
+            <div class="col-auto">
+                <button class="add-interval btn btn-primary"
+                        data-task-id="<%= @task.id %>">
+                    Add Time Interval
+                </button>
+            </div>
+        </div>
+      <% end %>
+  <% end %>
+
+
+

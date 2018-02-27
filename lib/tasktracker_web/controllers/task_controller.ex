@@ -10,7 +10,13 @@ defmodule TasktrackerWeb.TaskController do
     current_user = conn.assigns[:current_user]
     if current_user do
       tasks = Posts.list_creator_tasks(current_user.id)
-      render(conn, "index.html", tasks: tasks)
+      time_interval = Enum.map(tasks, fn x ->
+        Posts.calc_time_interval(x.id)
+      end)
+      |> List.flatten
+      |> Enum.into(%{})
+      # render(conn, "index.html", tasks: tasks)
+      render(conn, "index.html", tasks: tasks, time_interval: time_interval)
     else
       conn
       |> put_status(401)
@@ -47,7 +53,8 @@ defmodule TasktrackerWeb.TaskController do
     if current_user do
       if task.creator_id == current_user.id or
       task.user_id == current_user.id do
-        render(conn, "show.html", task: task)
+        intervals = Posts.get_interval_by_task(id)
+        render(conn, "show.html", task: task, intervals: intervals)
       end
     end
     conn
@@ -61,13 +68,15 @@ defmodule TasktrackerWeb.TaskController do
     changeset = Posts.change_task(task)
     current_user = conn.assigns[:current_user]
     mgmt_users = Accounts.manage_map(current_user.id)
-    render(conn, "edit.html", task: task, changeset: changeset, all_users: mgmt_users)
+    intervals = Posts.get_interval_by_task(id)
+    render(conn, "edit.html", task: task, changeset: changeset, all_users: mgmt_users, intervals: intervals)
   end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
     task = Posts.get_task!(id)
     current_user = conn.assigns[:current_user]
     mgmt_users = Accounts.manage_map(current_user.id)
+    intervals = Posts.get_interval_by_task(id)
 
     case Posts.update_task(task, task_params) do
       {:ok, _} ->
@@ -75,7 +84,7 @@ defmodule TasktrackerWeb.TaskController do
         |> put_flash(:info, "Task updated successfully.")
         |> redirect(to: page_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", task: task, changeset: changeset, all_users: mgmt_users)
+        render(conn, "edit.html", task: task, changeset: changeset, all_users: mgmt_users, intervals: intervals)
     end
   end
 

@@ -20,6 +20,18 @@ import "phoenix_html";
 
 // import socket from "./socket"
 
+function update_timestamp_button() {
+    $(".timestamp-btn").each((_,bb) => {
+        let time_id = $(bb).data("time-id");
+        if (time_id == "") {
+            $(bb).text("Start Work");
+        }
+        else {
+            $(bb).text("Stop Work");
+        }
+    });
+}
+
 function update_button() {
     $(".manage-button").each((_, bb) => {
         let manage_id = $(bb).data("manage-id");
@@ -68,6 +80,106 @@ function unmanage(employee_id, manage_id) {
     });
 }
 
+function set_timestamp_button(task_id, value) {
+    $(".timestamp-btn").each((_, bb) => {
+        if ($(bb).data("task-id") == task_id) {
+            $(bb).data("time-id", value);
+        }
+    });
+    update_timestamp_button();
+}
+
+function stop_timestamp(time_id, task_id) {
+    let current_time = new Date();
+
+    let text = JSON.stringify({
+        timeblock: {
+            stop_time: current_time,
+        }
+    });
+
+    $.ajax(timeblock_path + "/" + time_id, {
+        type: "patch",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: text,
+        success: () => {
+            set_timestamp_button(task_id, "");
+            location.reload();}
+    });
+}
+
+function start_timestamp(task_id) {
+    let current_time = new Date();
+
+    let text = JSON.stringify({
+        timeblock: {
+            task_id: task_id,
+            start_time: current_time,
+            stop_time: current_time,
+        }
+    });
+
+    $.ajax(timeblock_path, {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: text,
+        success: (resp) => {set_timestamp_button(task_id, resp.data.id);}
+    });
+}
+
+
+function time_click(ev) {
+    let btn = $(ev.target);
+    let task_id = btn.data("task-id");
+    let time_id = btn.data("time-id");
+    if (time_id == "") {
+        start_timestamp(task_id);
+    }
+    else {
+        let update_path = btn.data("update-path");
+        stop_timestamp(time_id, task_id);
+    }
+}
+
+function delete_interval(ev) {
+    if (confirm("Are you sure?")) {
+        let btn = $(ev.target);
+        let time_id = btn.data("time-id");
+
+        $.ajax(timeblock_path + "/" + time_id, {
+            method: "delete",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: "",
+            success: () => {location.reload();}
+        });
+    }
+}
+
+function add_interval(ev) {
+    let start_time = $(".start-time-input").val();
+    let stop_time = $(".stop-time-input").val();
+    let task_id = $(ev.target).data("task-id");
+
+    let text = JSON.stringify({
+        timeblock: {
+            task_id: task_id,
+            start_time: new Date(start_time),
+            stop_time: new Date(stop_time)
+        }
+    });
+
+    $.ajax(timeblock_path, {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: text,
+        success: () => {location.reload();}
+    });
+
+}
 
 function manage_click(ev) {
     let btn = $(ev.target);
@@ -85,7 +197,11 @@ function manage_click(ev) {
 
 function init_button() {
     $(".manage-button").click(manage_click);
+    $(".timestamp-btn").click(time_click);
+    $(".delete-interval").click(delete_interval);
+    $(".add-interval").click(add_interval);
     update_button();
+    update_timestamp_button();
 }
 
 $(init_button);

@@ -213,6 +213,7 @@ defmodule Tasktracker.Accounts do
       {x.employee_id, x.id}
     end)
     |> Enum.into(%{})
+    |> IO.inspect
   end
 
   def employee_map(user_id) do

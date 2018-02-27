@@ -23,22 +23,30 @@
   </li>
 
   <li>
-    <strong>Hours:</strong>
-    <%= @task.hours %>
-  </li>
-
-  <li>
-    <strong>Minutes:</strong>
-    <%= @task.mins %>
-  </li>
-
-  <li>
     <strong>Complete:</strong>
     <%= if @task.complete do %>
         Yes
     <% else %>
         No
     <% end %>
+  </li>
+
+  <li>
+      <strong>Time Interval:</strong>
+      <ul>
+          <%= for t <- @intervals do %>
+              <li>
+                <strong>Start Time:</strong>
+                <%= DateTime.truncate(t.start_time, :second) %>
+                <strong>Stop Time:</strong>
+                <%= if DateTime.diff(t.stop_time, t.start_time, :second) == 0 do %>
+                    Still working
+                <% else %>
+                    <%= DateTime.truncate(t.stop_time, :second) %>
+                <% end %>
+              </li>
+          <% end %>
+      </ul>
   </li>
 
 </ul>
