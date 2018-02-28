@@ -166,7 +166,7 @@ function add_interval(ev) {
     let start_datetime = new Date(start_date + "T" + start_time);
     let stop_datetime = new Date(stop_date + "T" + stop_time);
 
-    if (start_datetime <= stop_datetime) {
+    if (start_datetime >= stop_datetime) {
         alert("Stop Time has to be after Start Time")
     }
     else {
