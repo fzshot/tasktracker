@@ -103,9 +103,11 @@
         <div class="row" style="margin-top: 1rem; margin-bottom: 1rem">
             <div class="col-auto">
                 <label for="start-time">Start Time</label>
-                <input type="datetime-local" class="start-time-input">
+                <input type="date" class="start-date-input">
+                <input type="time" class="start-time-input">
                 <label for="stop-time">Stop Time</label>
-                <input type="datetime-local" class="stop-time-input">
+                <input type="date" class="stop-date-input">
+                <input type="time" class="stop-time-input">
             </div>
         </div>
         <div class="row" style="margin-top: 1rem; margin-bottom: 1rem">

@@ -160,21 +160,26 @@ function delete_interval(ev) {
 
 function add_interval(ev) {
     let start_time = $(".start-time-input").val();
+    let start_date = $(".start-date-input").val();
     let stop_time = $(".stop-time-input").val();
-    if (stop_time <= start_time) {
+    let stop_date = $(".stop-date-input").val();
+    let start_datetime = new Date(start_date + "T" + start_time);
+    let stop_datetime = new Date(stop_date + "T" + stop_time);
+
+    if (stop_date <= start_date) {
         alert("Stop Time has to be after Start Time")
     }
     else {
         let task_id = $(ev.target).data("task-id");
 
-        console.log(start_time);
-        console.log(stop_time);
+        // console.log(start_datetime);
+        // console.log(stop_datetime);
 
         let text = JSON.stringify({
             timeblock: {
                 task_id: task_id,
-                start_time: new Date(start_time),
-                stop_time: new Date(stop_time)
+                start_time: start_datetime,
+                stop_time: stop_datetime
             }
         });
 
