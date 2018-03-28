@@ -37,14 +37,6 @@ defmodule Tasktracker.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  def get_user(id) do
-    Repo.get(User, id)
-  end
-
-  def get_user_by_email(email) do
-    Repo.get_by(User, email: email)
-  end
-
   @doc """
   Creates a user.
 
@@ -58,7 +50,11 @@ defmodule Tasktracker.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
+    pass = Comeonin.Argon2.hashpwsalt(attrs["password_hash"])
+    IO.inspect(attrs)
+    IO.inspect(pass)
     %User{}
+    |> Map.put("password_hash", pass)
     |> User.changeset(attrs)
     |> Repo.insert()
   end
@@ -108,5 +104,12 @@ defmodule Tasktracker.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def get_and_auth(email, pass) do
+    Repo.one(
+      from u in User,
+      where: u.email == ^email)
+    |> Comeonin.Argon2.check_pass(pass)
   end
 end

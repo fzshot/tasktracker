@@ -19,3 +19,12 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import index_router from "./router";
+
+
+function init() {
+    let root = document.getElementById("root");
+    index_router(root);
+}
+
+$(init);

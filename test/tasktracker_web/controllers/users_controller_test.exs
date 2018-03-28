@@ -1,16 +1,16 @@
-defmodule TasktrackerWeb.UserControllerTest do
+defmodule TasktrackerWeb.UsersControllerTest do
   use TasktrackerWeb.ConnCase
 
   alias Tasktracker.Accounts
-  alias Tasktracker.Accounts.User
+  alias Tasktracker.Accounts.Users
 
   @create_attrs %{email: "some email", name: "some name", password_hash: "some password_hash"}
   @update_attrs %{email: "some updated email", name: "some updated name", password_hash: "some updated password_hash"}
   @invalid_attrs %{email: nil, name: nil, password_hash: nil}
 
-  def fixture(:user) do
-    {:ok, user} = Accounts.create_user(@create_attrs)
-    user
+  def fixture(:users) do
+    {:ok, users} = Accounts.create_users(@create_attrs)
+    users
   end
 
   setup %{conn: conn} do
@@ -18,18 +18,18 @@ defmodule TasktrackerWeb.UserControllerTest do
   end
 
   describe "index" do
-    test "lists all users", %{conn: conn} do
-      conn = get conn, user_path(conn, :index)
+    test "lists all user", %{conn: conn} do
+      conn = get conn, users_path(conn, :index)
       assert json_response(conn, 200)["data"] == []
     end
   end
 
-  describe "create user" do
-    test "renders user when data is valid", %{conn: conn} do
-      conn = post conn, user_path(conn, :create), user: @create_attrs
+  describe "create users" do
+    test "renders users when data is valid", %{conn: conn} do
+      conn = post conn, users_path(conn, :create), users: @create_attrs
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get conn, user_path(conn, :show, id)
+      conn = get conn, users_path(conn, :show, id)
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "email" => "some email",
@@ -38,19 +38,19 @@ defmodule TasktrackerWeb.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post conn, user_path(conn, :create), user: @invalid_attrs
+      conn = post conn, users_path(conn, :create), users: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
 
-  describe "update user" do
-    setup [:create_user]
+  describe "update users" do
+    setup [:create_users]
 
-    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
-      conn = put conn, user_path(conn, :update, user), user: @update_attrs
+    test "renders users when data is valid", %{conn: conn, users: %Users{id: id} = users} do
+      conn = put conn, users_path(conn, :update, users), users: @update_attrs
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get conn, user_path(conn, :show, id)
+      conn = get conn, users_path(conn, :show, id)
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "email" => "some updated email",
@@ -58,26 +58,26 @@ defmodule TasktrackerWeb.UserControllerTest do
         "password_hash" => "some updated password_hash"}
     end
 
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
-      conn = put conn, user_path(conn, :update, user), user: @invalid_attrs
+    test "renders errors when data is invalid", %{conn: conn, users: users} do
+      conn = put conn, users_path(conn, :update, users), users: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
 
-  describe "delete user" do
-    setup [:create_user]
+  describe "delete users" do
+    setup [:create_users]
 
-    test "deletes chosen user", %{conn: conn, user: user} do
-      conn = delete conn, user_path(conn, :delete, user)
+    test "deletes chosen users", %{conn: conn, users: users} do
+      conn = delete conn, users_path(conn, :delete, users)
       assert response(conn, 204)
       assert_error_sent 404, fn ->
-        get conn, user_path(conn, :show, user)
+        get conn, users_path(conn, :show, users)
       end
     end
   end
 
-  defp create_user(_) do
-    user = fixture(:user)
-    {:ok, user: user}
+  defp create_users(_) do
+    users = fixture(:users)
+    {:ok, users: users}
   end
 end

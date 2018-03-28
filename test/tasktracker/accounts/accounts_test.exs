@@ -3,12 +3,76 @@ defmodule Tasktracker.AccountsTest do
 
   alias Tasktracker.Accounts
 
+  describe "user" do
+    alias Tasktracker.Accounts.Users
+
+    @valid_attrs %{email: "some email", name: "some name", password_hash: "some password_hash"}
+    @update_attrs %{email: "some updated email", name: "some updated name", password_hash: "some updated password_hash"}
+    @invalid_attrs %{email: nil, name: nil, password_hash: nil}
+
+    def users_fixture(attrs \\ %{}) do
+      {:ok, users} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_users()
+
+      users
+    end
+
+    test "list_user/0 returns all user" do
+      users = users_fixture()
+      assert Accounts.list_user() == [users]
+    end
+
+    test "get_users!/1 returns the users with given id" do
+      users = users_fixture()
+      assert Accounts.get_users!(users.id) == users
+    end
+
+    test "create_users/1 with valid data creates a users" do
+      assert {:ok, %Users{} = users} = Accounts.create_users(@valid_attrs)
+      assert users.email == "some email"
+      assert users.name == "some name"
+      assert users.password_hash == "some password_hash"
+    end
+
+    test "create_users/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_users(@invalid_attrs)
+    end
+
+    test "update_users/2 with valid data updates the users" do
+      users = users_fixture()
+      assert {:ok, users} = Accounts.update_users(users, @update_attrs)
+      assert %Users{} = users
+      assert users.email == "some updated email"
+      assert users.name == "some updated name"
+      assert users.password_hash == "some updated password_hash"
+    end
+
+    test "update_users/2 with invalid data returns error changeset" do
+      users = users_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_users(users, @invalid_attrs)
+      assert users == Accounts.get_users!(users.id)
+    end
+
+    test "delete_users/1 deletes the users" do
+      users = users_fixture()
+      assert {:ok, %Users{}} = Accounts.delete_users(users)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_users!(users.id) end
+    end
+
+    test "change_users/1 returns a users changeset" do
+      users = users_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_users(users)
+    end
+  end
+
   describe "users" do
     alias Tasktracker.Accounts.User
 
-    @valid_attrs %{email: "some email", name: "some name"}
-    @update_attrs %{email: "some updated email", name: "some updated name"}
-    @invalid_attrs %{email: nil, name: nil}
+    @valid_attrs %{email: "some email", name: "some name", password_hash: "some password_hash"}
+    @update_attrs %{email: "some updated email", name: "some updated name", password_hash: "some updated password_hash"}
+    @invalid_attrs %{email: nil, name: nil, password_hash: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -33,6 +97,7 @@ defmodule Tasktracker.AccountsTest do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some email"
       assert user.name == "some name"
+      assert user.password_hash == "some password_hash"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -45,6 +110,7 @@ defmodule Tasktracker.AccountsTest do
       assert %User{} = user
       assert user.email == "some updated email"
       assert user.name == "some updated name"
+      assert user.password_hash == "some updated password_hash"
     end
 
     test "update_user/2 with invalid data returns error changeset" do

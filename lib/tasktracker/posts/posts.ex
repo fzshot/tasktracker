@@ -19,38 +19,7 @@ defmodule Tasktracker.Posts do
   """
   def list_tasks do
     Repo.all(Task)
-    |> Repo.preload(:user)
-    |> Repo.preload(:creator)
-    |> List.wrap
   end
-
-  # def get_task_by_user_creator(id) do
-  #   query =
-  #     from(
-  #       t in Task,
-  #       where: t.creator_id == ^id,
-  #       select: t
-  #     )
-  #   Repo.all(query)
-  #   |> Repo.preload(:user)
-  #   |> Repo.preload(:creator)
-  #   |> List.wrap
-  # end
-
-  # def get_task_by_user_creator(id) do
-  #   query =
-  #     from(
-  #       t in Task,
-  #       # where: t.user_id == ^id,
-  #       where: t.creator_id == ^id,
-  #       select: t
-  #     )
-  #   Repo.all(query)
-  #   |> Repo.preload(:user)
-  #   |> Repo.preload(:creator)
-  #   |> List.wrap
-  # end
-
 
   @doc """
   Gets a single task.
@@ -66,11 +35,7 @@ defmodule Tasktracker.Posts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_task!(id) do
-    Repo.get!(Task, id)
-    |> Repo.preload(:user)
-    |> Repo.preload(:creator)
-  end
+  def get_task!(id), do: Repo.get!(Task, id)
 
   @doc """
   Creates a task.
