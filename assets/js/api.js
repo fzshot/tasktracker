@@ -1,4 +1,5 @@
-// import store from "./store";
+import store from "./store";
+
 class API {
     create_user(e){
         e.preventDefault();
@@ -28,6 +29,32 @@ class API {
             data: text,
             success: () => {
                 window.location.replace("http://"+host);
+            }
+        });
+    }
+
+    submit_login(e) {
+        e.preventDefault();
+
+        let email = $("#email").val();
+        let pass = $("#password").val();
+
+        let text = {
+            email: email,
+            pass: pass,
+        };
+
+        $.ajax(token_path, {
+            method: "post",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify(text),
+            success: (resp) => {
+                console.log(resp);
+                store.dispatch({
+                    type: "SET_TOKEN",
+                    token: resp,
+                });
             }
         });
     }

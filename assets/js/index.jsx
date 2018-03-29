@@ -1,12 +1,30 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {connect} from "react-redux";
 
 import Login from "./login";
+import Tasks from "./tasks";
 
-export default function Index() {
+function Index(props) {
     return (
         <div>
-            <Login/>
+            <Check token={props.token}/>
         </div>
     );
 }
+
+
+function Check(props) {
+    if (props.token) {
+        return <Tasks token={props.token}/>;
+    } else {
+        return <Login/>;
+    }
+}
+
+function state2props(state) {
+    return {
+        token: state.token,
+    }
+}
+
+export default connect(state2props)(Index);

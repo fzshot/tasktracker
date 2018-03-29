@@ -51,10 +51,9 @@ defmodule Tasktracker.Accounts do
   """
   def create_user(attrs \\ %{}) do
     pass = Comeonin.Argon2.hashpwsalt(attrs["password_hash"])
-    IO.inspect(attrs)
-    IO.inspect(pass)
-    %User{}
+    attrs = attrs
     |> Map.put("password_hash", pass)
+    %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
   end
