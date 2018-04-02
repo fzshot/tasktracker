@@ -5,6 +5,15 @@ import {Link, Redirect} from "react-router-dom";
 import api from "./api";
 
 function NewTask(props) {
+    /* function update(ev) {
+     *     let tgt = $(ev.target);
+     *     let data = {};
+     *     data[tgt.attr("name")] = tgt.val();
+     *     let action = {
+     *         type: "UPDATE_TASK_FORM",
+     *         data: data
+     *     }
+     * }*/
     if(props.token) {
         return(
             <div className="row justify-content-center">
@@ -34,6 +43,13 @@ function NewTask(props) {
                         <div className="form-group">
                             <label htmlFor="body">Body</label>
                             <textarea className="form-control" id="body"/>
+                        </div>
+                        <div className="row justify-content-end">
+                            <div className="col-auto">
+                                <button type="submit" className="btn btn-primary">
+                                    Create Task
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
