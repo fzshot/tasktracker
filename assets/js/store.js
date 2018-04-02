@@ -1,11 +1,14 @@
 import {createStore, combineReducers} from "redux";
 import deepFreeze from "deep-freeze";
 
-// let empty_token = {
-//     user_name: "",
-//     user_id: "",
-//     token: "",
-// }
+function users(state = [], action) {
+    switch(action.type) {
+        case "GET_USER":
+            return action.users;
+        default:
+            return state;
+    }
+}
 
 function token(state = null, action) {
     switch(action.type) {
@@ -19,19 +22,8 @@ function token(state = null, action) {
 }
 
 
-// function userform(state = empty_userform, action) {
-//     switch(action.type) {
-//         case "LOGIN":
-//             return action.data;
-//         case "LOGOUT":
-//             return empty_userform;
-//         default:
-//             return state;
-//     }
-// }
-
 function root_reducer(state0, action) {
-    let reducer = combineReducers({token});
+    let reducer = combineReducers({token, users});
     let state1 = reducer(state0, action);
     return deepFreeze(state1);
 }

@@ -58,6 +58,51 @@ class API {
             }
         });
     }
+
+    get_tasks() {
+        $.ajax(task_path, {
+            method: "get",
+            success: (resp) => {
+                return resp;
+            }
+        });
+    }
+
+    new_task(e, creator_id) {
+        e.preventDefault();
+
+        let user_id = $("#user-id").val();
+        let title = $("#title").val();
+        let body = $("#body").val();
+
+        let text = {
+            task: {
+                body: body,
+                title: title,
+                user_id: user_id,
+                creator_id: creator_id,
+            }
+        };
+
+        $.ajax(task_path, {
+            method: "post",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: text,
+        });
+    }
+
+    get_user() {
+        $.ajax(user_path, {
+            method: "get",
+            success: (resp) => {
+                store.dispatch({
+                    type: "GET_USER",
+                    users: resp.data,
+                });
+            }
+        });
+    }
 }
 
 export default new API();
