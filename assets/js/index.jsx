@@ -5,6 +5,8 @@ import {Link} from "react-router-dom";
 import Login from "./login";
 import Tasks from "./tasks";
 
+import api from "./api";
+
 function Index(props) {
     return (
         <div>
@@ -30,7 +32,7 @@ function Check(props) {
                         </Link>
                     </div>
                 </div>
-                <Tasks token={props.token}/>
+                <Tasks onEnter={api.get_tasks()}/>
             </div>
         );
     } else {

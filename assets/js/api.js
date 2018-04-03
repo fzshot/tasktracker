@@ -55,25 +55,21 @@ class API {
                     type: "SET_TOKEN",
                     token: resp,
                 });
+            },
+            error: () => {
+                alert("Incorrect Email or Password!");
             }
         });
     }
 
-    get_tasks() {
-        $.ajax(task_path, {
-            method: "get",
-            success: (resp) => {
-                return resp;
-            }
-        });
-    }
 
-    new_task(e, creator_id) {
+    new_task(e, token, form) {
         e.preventDefault();
 
-        let user_id = $("#user-id").val();
-        let title = $("#title").val();
-        let body = $("#body").val();
+        let creator_id = token.user_id;
+        let title = form.title;
+        let body = form.body;
+        let user_id = $("select[name=user]").val();
 
         let text = {
             task: {
@@ -81,14 +77,30 @@ class API {
                 title: title,
                 user_id: user_id,
                 creator_id: creator_id,
-            }
+            },
+            token: token.token,
         };
+
+        console.log(text)
+
+        let empty_task = {
+            title: "",
+            body: "",
+        };
+
+        let host = window.location.host;
 
         $.ajax(task_path, {
             method: "post",
             dataType: "json",
             contentType: "application/json; charset=UTF-8",
-            data: text,
+            data: JSON.stringify(text),
+            success: () => {
+                store.dispatch({
+                    type: "CLEAN_TASKFORM",
+                });
+                alert("Task Created!");
+            }
         });
     }
 
@@ -100,6 +112,27 @@ class API {
                     type: "GET_USER",
                     users: resp.data,
                 });
+            }
+        });
+    }
+
+    get_tasks() {
+        $.ajax(task_path, {
+            method: "get",
+            success: (resp) => {
+                store.dispatch({
+                    type: "GET_TASKS",
+                    tasks: resp.data,
+                });
+            }
+        });
+    }
+
+    delete_task(id) {
+        $.ajax(task_path+"/"+id, {
+            method: "delete",
+            success: () => {
+                this.get_tasks();
             }
         });
     }

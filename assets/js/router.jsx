@@ -20,6 +20,7 @@ export default function Index_router(root) {
                 <Route path="/newtask" exact={true} render={() =>
                     <NewTask/>
                 } onEnter={api.get_user()}/>
+                <Route path="/edittask/:id" exact={true}/>
             </div>
         </Router>
     );

@@ -7,11 +7,11 @@ defmodule Tasktracker.Posts.Task do
   schema "tasks" do
     field :body, :string
     field :complete, :boolean, default: false
-    field :hours, :integer
-    field :mins, :integer
+    field :hours, :integer, default: 0
+    field :mins, :integer, default: 0
     field :title, :string
-    field :user_id, :id
-    field :creator_id, :id
+    belongs_to :user, Tasktracker.Accounts.User
+    belongs_to :creator, Tasktracker.Accounts.User
 
     timestamps()
   end
@@ -19,7 +19,7 @@ defmodule Tasktracker.Posts.Task do
   @doc false
   def changeset(%Task{} = task, attrs) do
     task
-    |> cast(attrs, [:title, :body, :hours, :mins, :complete])
-    |> validate_required([:title, :body, :hours, :mins, :complete])
+    |> cast(attrs, [:creator_id, :user_id, :title, :body, :hours, :mins, :complete])
+    |> validate_required([:creator_id, :user_id, :title, :body, :hours, :mins, :complete])
   end
 end
