@@ -8,10 +8,6 @@ class API {
         let name = $("#name").val();
         let pass = $("#password").val();
 
-        console.log(name);
-        console.log(email);
-        console.log(pass);
-
         let text = JSON.stringify({
             user: {
                 email: email,
@@ -20,7 +16,6 @@ class API {
             }
         });
 
-        let host = window.location.host;
 
         $.ajax(user_path, {
             method: "post",
@@ -28,7 +23,12 @@ class API {
             contentType: "application/json; charset=UTF-8",
             data: text,
             success: () => {
-                window.location.replace("http://"+host);
+                store.dispatch({
+                    type: "REDIRECT",
+                });
+                store.dispatch({
+                    type: "NOREDIRECT",
+                });
             }
         });
     }
@@ -50,7 +50,6 @@ class API {
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify(text),
             success: (resp) => {
-                console.log(resp);
                 store.dispatch({
                     type: "SET_TOKEN",
                     token: resp,
@@ -81,7 +80,6 @@ class API {
             token: token.token,
         };
 
-        console.log(text)
 
         let empty_task = {
             title: "",
@@ -99,7 +97,12 @@ class API {
                 store.dispatch({
                     type: "CLEAN_TASKFORM",
                 });
-                alert("Task Created!");
+                store.dispatch({
+                    type: "REDIRECT",
+                });
+                store.dispatch({
+                    type: "NOREDIRECT",
+                });
             }
         });
     }

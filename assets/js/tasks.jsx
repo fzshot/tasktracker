@@ -6,7 +6,6 @@ function Tasks(props) {
     let name = props.token.user_name;
     let user_id = props.token.user_id;
 
-    console.log(props.tasks)
     let tasks = _.filter(props.tasks, (t) => {
         return(t.creator.id == user_id) || (t.user.id == user_id)
     });

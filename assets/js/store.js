@@ -26,6 +26,17 @@ let empty_task = {
     body: "",
 }
 
+function redirect(state = false, action) {
+    switch(action.type) {
+        case "REDIRECT":
+            return true;
+        case "NOREDIRECT":
+            return false;
+        default:
+            return state;
+    }
+}
+
 function taskform(state = empty_task, action) {
     switch(action.type) {
         case "UPDATE_TASKFORM":
@@ -48,7 +59,7 @@ function tasks(state = [], action) {
 
 
 function root_reducer(state0, action) {
-    let reducer = combineReducers({token, users, taskform, tasks});
+    let reducer = combineReducers({token, users, taskform, tasks, redirect});
     let state1 = reducer(state0, action);
     return deepFreeze(state1);
 }

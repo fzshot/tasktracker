@@ -17,12 +17,13 @@ function Index(props) {
 
 
 function Check(props) {
+    console.log(props.token);
     if (props.token) {
         return (
             <div>
                 <div className="row justify-content-between">
                     <div className="col-auto">
-                        <h3>Listing Tasks</h3>
+                        <h3>Listing Tasks (Login as: {props.token.user_name})</h3>
                     </div>
                     <div className="col-auto">
                         <Link to="/newtask">
