@@ -136,8 +136,10 @@ class API {
         });
     }
 
-    delete_task(id) {
-        $.ajax(task_path+"/"+id, {
+    delete_task(id, token) {
+        let path = task_path+"/"+id+"|"+token;
+
+        $.ajax(path, {
             method: "delete",
             success: () => {
                 this.get_tasks();

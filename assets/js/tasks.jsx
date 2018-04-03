@@ -9,7 +9,7 @@ function Tasks(props) {
     let tasks = _.filter(props.tasks, (t) => {
         return(t.creator.id == user_id) || (t.user.id == user_id)
     });
-    return <Cards tasks={tasks} user_id={user_id}/>;
+    return <Cards tasks={tasks} user_id={user_id} token={props.token.token}/>;
 }
 
 
@@ -36,7 +36,7 @@ function Cards(props) {
                                 {t.body}
                             </p>
                             <div style={{textAlign: "right"}}>
-                                <DeleteButton creator_id={t.creator.id} task_id={t.id} user_id={props.user_id}/>
+                                <DeleteButton creator_id={t.creator.id} task_id={t.id} user_id={props.user_id} token={props.token}/>
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@ function Cards(props) {
     let tasks = props.tasks;
 
     _.each(tasks, (task) => {
-        cards.push(<Card task={task} key={task.id} user_id={props.user_id}/>);
+        cards.push(<Card task={task} key={task.id} user_id={props.user_id} token={props.token}/>);
     });
 
     return cards;
@@ -61,7 +61,7 @@ function DeleteButton(props) {
     let user_id = props.user_id;
     if (user_id == creator_id) {
         return(
-            <button className="btn btn-danger" onClick={() => api.delete_task(id)}>
+            <button className="btn btn-danger" onClick={() => api.delete_task(id, props.token)}>
                 Delete
             </button>
         );

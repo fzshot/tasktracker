@@ -13,12 +13,6 @@ defmodule TasktrackerWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", TasktrackerWeb do
-    pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
-  end
-
   # Other scopes may use custom stacks.
   scope "/api/v1", TasktrackerWeb do
     pipe_through :api
@@ -28,4 +22,11 @@ defmodule TasktrackerWeb.Router do
 
     post "/token", TokenController, :create
   end
+
+  scope "/", TasktrackerWeb do
+    pipe_through :browser # Use the default browser stack
+
+    get "/*path", PageController, :index
+  end
+
 end

@@ -44,7 +44,15 @@ defmodule TasktrackerWeb.TaskController do
   end
 
   def delete(conn, %{"id" => id}) do
+    [id, token] = String.split(id, "|")
+    id = String.to_integer(id)
     task = Posts.get_task!(id)
+    {:ok, user_id} = Phoenix.Token.verify(conn, "auth token", token, max_age: 86400)
+    if task.creator_id != user_id do
+      IO.inspect(task.creator_id)
+      IO.inspect(user_id)
+      raise "Not Authorized"
+    end
     with {:ok, %Task{}} <- Posts.delete_task(task) do
       send_resp(conn, :no_content, "")
     end
