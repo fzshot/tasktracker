@@ -16,17 +16,17 @@ function NewUser(props) {
                         <div className="form-group">
                             <label htmlFor="name">Name</label>
                             <input type="text" className="form-control"
-                            id="name" placeholder="John Doe"/>
+                            id="name" placeholder="John Doe" required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">Email address</label>
                             <input type="email" className="form-control"
-                            id="email" placeholder="demo@example.com"/>
+                            id="email" placeholder="demo@example.com" required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
                             <input type="password" className="form-control"
-                            id="password" placeholder="Password"/>
+                            id="password" placeholder="Password" required />
                         </div>
                         <div className="row justify-content-end">
                             <div className="col-auto">

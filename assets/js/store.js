@@ -37,6 +37,17 @@ function redirect(state = false, action) {
     }
 }
 
+function login(state = false, action) {
+    switch(action.type) {
+        case "LOGIN_ERROR":
+            return true;
+        case "LOGIN_OK":
+            return false;
+        default:
+            return state;
+    }
+}
+
 function taskform(state = empty_task, action) {
     switch(action.type) {
         case "UPDATE_TASKFORM":
@@ -59,7 +70,7 @@ function tasks(state = [], action) {
 
 
 function root_reducer(state0, action) {
-    let reducer = combineReducers({token, users, taskform, tasks, redirect});
+    let reducer = combineReducers({token, users, taskform, tasks, redirect, login});
     let state1 = reducer(state0, action);
     return deepFreeze(state1);
 }

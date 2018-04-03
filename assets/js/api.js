@@ -51,12 +51,17 @@ class API {
             data: JSON.stringify(text),
             success: (resp) => {
                 store.dispatch({
+                    type: "LOGIN_OK",
+                });
+                store.dispatch({
                     type: "SET_TOKEN",
                     token: resp,
                 });
             },
             error: () => {
-                alert("Incorrect Email or Password!");
+                store.dispatch({
+                    type: "LOGIN_ERROR",
+                });
             }
         });
     }

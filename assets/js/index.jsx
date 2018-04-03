@@ -17,7 +17,6 @@ function Index(props) {
 
 
 function Check(props) {
-    console.log(props.token);
     if (props.token) {
         return (
             <div>
