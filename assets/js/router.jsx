@@ -20,10 +20,10 @@ export default function Index_router(root) {
                 }/>
                 <Route path="/newtask" exact={true} render={() =>
                     <NewTask/>
-                } onEnter={api.get_user()}/>
+                } componentWillMount={api.get_user()}/>
                 <Route path="/edittask/:id" exact={true} render={() =>
                     <EditTask/>
-                } onEnter={api.get_user()}/>
+                } componentWillMount={api.get_user()}/>
             </div>
         </Router>
     );
