@@ -45,7 +45,6 @@ function NewUser(props) {
 }
 
 function Warning(props) {
-    console.log(props);
     let dup = props.newuser_dup.boolean;
     if (dup) {
         return(

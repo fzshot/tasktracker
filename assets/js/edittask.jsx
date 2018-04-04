@@ -5,7 +5,6 @@ import {Link, Redirect} from "react-router-dom";
 import api from "./api";
 
 function EditTask(props) {
-    console.log(props.edittask);
     if(props.token) {
         if (props.redirect) {
             return <Redirect to="/"/>;
