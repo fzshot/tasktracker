@@ -146,6 +146,66 @@ class API {
             }
         });
     }
+
+    save_edit_task(task) {
+        store.dispatch({
+            type: "SAVE",
+            task: task,
+        });
+    }
+
+    edit_task(e, token, id, type) {
+        e.preventDefault();
+
+        let text = {};
+
+        let mins = $("#mins").val();
+        let hours = $("#hours").val();
+        let complete = false;
+
+        if($("#complete").is(":checked")) {
+            complete = true;
+        }
+
+        if (type == "creator") {
+            let user_id = $("#user_id").val();
+            let title = $("#title").val();
+            let body = $("#body").val();
+
+            let task = {
+                user_id: user_id,
+                title: title,
+                body: body,
+                mins: mins,
+                hours: hours,
+                complete: complete,
+            };
+            text["task"] = task;
+        } else {
+            let task = {
+                mins: mins,
+                hours: hours,
+                complete: complete,
+            };
+            text["task"] = task;
+        }
+
+        $.ajax(task_path+"/"+id, {
+            type: "patch",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify(text),
+            success: () => {
+                store.dispatch({
+                    type: "REDIRECT",
+                });
+                store.dispatch({
+                    type: "NOREDIRECT",
+                });
+            }
+        });
+
+    }
 }
 
 export default new API();

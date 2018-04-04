@@ -68,9 +68,18 @@ function tasks(state = [], action) {
     }
 }
 
+function edittask(state = {}, action) {
+    switch(action.type) {
+        case "SAVE":
+            return action.task;
+        default:
+            return state;
+    }
+}
+
 
 function root_reducer(state0, action) {
-    let reducer = combineReducers({token, users, taskform, tasks, redirect, login});
+    let reducer = combineReducers({token, users, taskform, tasks, redirect, login, edittask});
     let state1 = reducer(state0, action);
     return deepFreeze(state1);
 }

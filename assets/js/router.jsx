@@ -6,6 +6,7 @@ import api from "./api";
 import Index from "./index";
 import NewUser from "./new_user";
 import NewTask from "./new_task";
+import EditTask from "./edittask";
 
 export default function Index_router(root) {
     return(
@@ -20,7 +21,9 @@ export default function Index_router(root) {
                 <Route path="/newtask" exact={true} render={() =>
                     <NewTask/>
                 } onEnter={api.get_user()}/>
-                <Route path="/edittask/:id" exact={true}/>
+                <Route path="/edittask/:id" exact={true} render={() =>
+                    <EditTask/>
+                } onEnter={api.get_user()}/>
             </div>
         </Router>
     );

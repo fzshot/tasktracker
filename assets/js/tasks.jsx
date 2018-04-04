@@ -1,6 +1,7 @@
 import React from "react";
 import api from "./api"
 import {connect} from "react-redux";
+import {Link} from "react-router-dom";
 
 function Tasks(props) {
     let name = props.token.user_name;
@@ -35,8 +36,18 @@ function Cards(props) {
                             <p className="card-text">
                                 {t.body}
                             </p>
-                            <div style={{textAlign: "right"}}>
-                                <DeleteButton creator_id={t.creator.id} task_id={t.id} user_id={props.user_id} token={props.token}/>
+                            <div className="row justify-content-end align-items-center">
+                                <div className="col-auto">
+                                    <Link to={"/edittask/"+t.id}
+                                        onClick={() => {
+                                                api.save_edit_task(t);
+                                        }}>
+                                        Edit
+                                    </Link>
+                                </div>
+                                <div className="col-auto">
+                                    <DeleteButton creator_id={t.creator.id} task_id={t.id} user_id={props.user_id} token={props.token}/>
+                                </div>
                             </div>
                         </div>
                     </div>

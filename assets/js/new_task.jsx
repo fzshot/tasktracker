@@ -37,7 +37,7 @@ function NewTask(props) {
                             <div className="form-group">
                                 <label htmlFor="user">Assign To</label>
                                 <select className="form-control" name="user">
-                                    <AllUser users={props.users} user_id={props.token.user_id}/>
+                                    <AllUser users={props.users}/>
                                 </select>
                             </div>
                             <div className="form-group">
@@ -51,7 +51,8 @@ function NewTask(props) {
                                 <label htmlFor="body">Body</label>
                                 <textarea className="form-control" name="body"
                                         value={props.form.body} onChange={(ev) => {
-                                                update(ev);}}/>
+                                                update(ev);
+                                        }}/>
                             </div>
                             <div className="row justify-content-end">
                                 <div className="col-auto">

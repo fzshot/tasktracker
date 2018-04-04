@@ -39,6 +39,9 @@ defmodule TasktrackerWeb.TaskController do
     task = Posts.get_task!(id)
 
     with {:ok, %Task{} = task} <- Posts.update_task(task, task_params) do
+      task = task
+      |> Repo.preload(:user)
+      |> Repo.preload(:creator)
       render(conn, "show.json", task: task)
     end
   end
