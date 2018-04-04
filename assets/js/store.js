@@ -21,6 +21,22 @@ function token(state = null, action) {
     }
 }
 
+let default_dup = {
+    boolean: false,
+    text: "",
+};
+
+function newuser_dup(state = default_dup, action) {
+    switch(action.type) {
+        case "DUP_EMAIL":
+            return action.newuser_dup;
+        case "REMOVE_DUP":
+            return default_dup;
+        default:
+            return state;
+    }
+}
+
 let empty_task = {
     title: "",
     body: "",
@@ -79,7 +95,8 @@ function edittask(state = {}, action) {
 
 
 function root_reducer(state0, action) {
-    let reducer = combineReducers({token, users, taskform, tasks, redirect, login, edittask});
+    let reducer = combineReducers({token, users, taskform, tasks, redirect, login,
+                                   edittask, newuser_dup});
     let state1 = reducer(state0, action);
     return deepFreeze(state1);
 }
