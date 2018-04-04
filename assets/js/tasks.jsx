@@ -40,6 +40,7 @@ function Cards(props) {
                                 <div className="col-auto">
                                     <Link to={"/edittask/"+t.id}
                                         onClick={() => {
+                                                api.get_user();
                                                 api.save_edit_task(t);
                                         }}>
                                         Edit

@@ -26,7 +26,8 @@ function Check(props) {
                     </div>
                     <div className="col-auto">
                         <Link to="/newtask">
-                            <button className="btn btn-primary">
+                            <button className="btn btn-primary"
+                            onClick={() => api.get_user()}>
                                 New Task
                             </button>
                         </Link>
