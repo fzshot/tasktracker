@@ -38,9 +38,7 @@ defmodule TasktrackerWeb.UserController do
     id = String.to_integer(id)
     user = Accounts.get_user!(id)
     {:ok, user_id} = Phoenix.Token.verify(conn, "auth token", token, max_age: 86400)
-    if task.creator_id != user_id do
-      IO.inspect(task.creator_id)
-      IO.inspect(user_id)
+    if user.id != user_id do
       raise "Not Authorized"
     end
     with {:ok, %User{}} <- Accounts.delete_user(user) do
